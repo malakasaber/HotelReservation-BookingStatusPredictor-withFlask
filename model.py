@@ -4,13 +4,12 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 import pickle
 
-# 1) Load your dataset
+# 1) Load dataset
 data = pd.read_csv('first inten project.csv')
 
-# Drop ID column if it exists (adjust if different name)
 data = data.drop('Booking_ID', axis=1, errors='ignore')
 
-# Encode categorical columns with mapping
+# Encoding
 meal_map = {'Meal Plan 1': 0, 'Not Selected': 1, 'Meal Plan 2': 2, 'Meal Plan 3': 3}
 room_map = {'Room_Type 1': 0, 'Room_Type 4': 1, 'Room_Type 6': 2, 'Room_Type 2': 3, 'Room_Type 5': 4, 'Room_Type 7': 5, 'Room_Type 3': 6}
 segment_map = {'Online': 0, 'Offline': 1, 'Corporate': 2, 'Complementary': 3, 'Aviation': 4}
@@ -19,13 +18,13 @@ data['type of meal'] = data['type of meal'].map(meal_map)
 data['room type'] = data['room type'].map(room_map)
 data['market segment type'] = data['market segment type'].map(segment_map)
 
-# Encode date of reservation as day of year
+# Handle Date
 data['date of reservation'] = pd.to_datetime(data['date of reservation'], errors='coerce').dt.dayofyear
 
-# Drop rows with NaN (from date conversion or encoding)
+# Drop Missing valuess
 data = data.dropna()
 
-# 2) Select features and target
+# 2) Feature Selection
 X = data.drop('booking status', axis=1)
 y = data['booking status'].map({'Not_Canceled': 0, 'Canceled': 1})
 
